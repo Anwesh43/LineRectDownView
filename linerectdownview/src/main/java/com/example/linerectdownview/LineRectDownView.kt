@@ -21,6 +21,7 @@ val colors : Array<Int> = arrayOf(
 val parts : Int = 4
 val strokeFactor : Int = 90
 val sizeFactor : Float = 2.9f
+val scGap : Float = 0.02f / parts
 val delay : Long = 20
 val backColor : Int = Color.parseColor("#BDBDBD")
 
@@ -67,5 +68,25 @@ class LineRectDownView(ctx : Context) : View(ctx) {
             }
         }
         return true
+    }
+
+    data class State(var scale : Float = 0f, var dir : Float = 0f, var prevScale : Float = 0f) {
+
+        fun update(cb : (Float) -> Unit) {
+            scale += scGap * dir
+            if (Math.abs(scale - prevScale) > 1) {
+                scale = prevScale + dir
+                prevScale = scale
+                dir = 0f
+                cb(prevScale)
+            }
+        }
+
+        fun startUpdating(cb : () -> Unit) {
+            if (dir == 0f) {
+                dir = 1f - 2 * prevScale
+                cb()
+            }
+        }
     }
 }
