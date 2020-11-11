@@ -20,7 +20,7 @@ val colors : Array<Int> = arrayOf(
 }.toTypedArray()
 val parts : Int = 4
 val strokeFactor : Int = 90
-val sizeFactor : Float = 2.9f
+val sizeFactor : Float = 3.8f
 val scGap : Float = 0.02f / parts
 val delay : Long = 20
 val backColor : Int = Color.parseColor("#BDBDBD")
@@ -39,10 +39,22 @@ fun Canvas.drawLineRectDown(w : Float, h : Float, scale : Float, paint : Paint) 
     for (j in 0..1) {
         save()
         translate(-size, -size + j * 2 * size)
-        drawLine(0f, 0f, 2 * size * sf.divideScale(0, parts), 0f, paint)
+        drawLine(
+            0f,
+            0f,
+            2 * size * sf.divideScale(0, parts) + size * 0.4f * Math.floor(sf.divideScale(0, parts).toDouble()).toFloat(),
+            0f,
+            paint
+        )
         restore()
     }
-    drawRect(RectF(size, -size, size * 1.1f, -size + 2 * size * sf.divideScale(1, parts)), paint)
+    drawRect(
+        RectF(
+            size - size * sf.divideScale(3, parts),
+            -size,
+            size * 1.4f,
+            -size + 2 * size * sf.divideScale(1, parts)
+        ), paint)
     restore()
 }
 
