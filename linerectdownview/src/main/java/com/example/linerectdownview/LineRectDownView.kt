@@ -27,4 +27,29 @@ val backColor : Int = Color.parseColor("#BDBDBD")
 fun Int.inverse() : Float = 1f / this
 fun Float.maxScale(i : Int, n : Int) : Float = Math.max(0f, this - i * n.inverse())
 fun Float.divideScale(i : Int, n : Int) : Float = Math.min(n.inverse(), maxScale(i, n)) * n
-fun Float.sinify(scale : Int) : Float = Math.sin(this * Math.PI).toFloat()
+fun Float.sinify() : Float = Math.sin(this * Math.PI).toFloat()
+
+fun Canvas.drawLineRectDown(w : Float, h : Float, scale : Float, paint : Paint) {
+    val size : Float = Math.min(w, h) / sizeFactor
+    val sf : Float = scale.sinify()
+    save()
+    translate(w / 2, h / 2)
+    rotate(90f * sf.divideScale(2, parts))
+    for (j in 0..1) {
+        save()
+        translate(-size, -size + j * 2 * size)
+        drawLine(0f, 0f, 2 * size * sf.divideScale(0, parts), 0f, paint)
+        restore()
+    }
+    drawRect(RectF(size, -size, size * 1.1f, -size + 2 * size * sf.divideScale(1, parts)), paint)
+    restore()
+}
+
+fun Canvas.drawLRDNode(i : Int, scale : Float, paint : Paint) {
+    val w : Float = width.toFloat()
+    val h : Float = height.toFloat()
+    paint.color = colors[i]
+    paint.strokeCap = Paint.Cap.ROUND
+    paint.strokeWidth = Math.min(w, h) / strokeFactor
+    drawLineRectDown(w, h, scale, paint)
+}
