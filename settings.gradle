@@ -1,0 +1,3 @@
+include ':linerectdownview'
+include ':app'
+rootProject.name = "LinkedLineRectDownView"
